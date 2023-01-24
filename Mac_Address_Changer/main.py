@@ -11,7 +11,7 @@ def get_arguments() -> optparse.Values:
     parser.add_option("-m", "--mac", dest="new_mac", help="New MAC address")
 
     # understand user input arguments
-    (options, arguments) = parser.parse_args()
+    options = parser.parse_args()
     if not options.interface:
         parser.error("[-] Please specify an interface, use --help for more info.")
     elif not options.new_mac:
@@ -19,11 +19,13 @@ def get_arguments() -> optparse.Values:
     return options
 
 
+
 def change_mac(interface: str, new_mac_addr: str)-> None:
     print(f"[+] Changing MAC address for {interface} to {new_mac_addr}")
     subprocess.call(["ifconfig", interface, "down"])
     subprocess.call(["ifconfig", interface, "hw", "ether", new_mac_addr])
     subprocess.call(["ifconfig", interface, "up"])
+
 
 
 options = get_arguments()
