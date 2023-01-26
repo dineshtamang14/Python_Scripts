@@ -4,6 +4,7 @@ import re
 
 
 def get_arguments() -> optparse.Values:
+    '''returns a user entered arguments'''
     # initizing object for taking input through argument
     parser = optparse.OptionParser()
     # options for user input through arguments
@@ -20,12 +21,14 @@ def get_arguments() -> optparse.Values:
 
 
 def change_mac(interface: str, new_mac_addr: str)-> None:
+    '''changes the old mac addr to new mac addr'''
     print(f"[+] Changing MAC address for {interface} to {new_mac_addr}")
     subprocess.call(["ifconfig", interface, "down"]) # executing a linux command to bring interface down
     subprocess.call(["ifconfig", interface, "hw", "ether", new_mac_addr]) # executing linux command to change mac addr
     subprocess.call(["ifconfig", interface, "up"]) # executing linux command to bring interface up
 
 def get_current_mac(interface: str)-> str:
+    '''returns a current mac addr'''
     # executing linux command to get interface info
     ifconfig_result = subprocess.check_output(["ifconfig", interface]) 
     # filtering linux command output using regex to return only mac address
