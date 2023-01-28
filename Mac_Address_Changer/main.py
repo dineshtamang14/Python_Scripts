@@ -4,7 +4,7 @@ import re
 
 
 def get_arguments() -> optparse.Values:
-    '''returns a user entered arguments'''
+    '''captures and returns the arguments passed by the user'''
     # initizing object for taking input through argument
     parser = optparse.OptionParser()
     # options for user input through arguments
