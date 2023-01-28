@@ -6,12 +6,12 @@ def scan(ip: str) -> None:
     arp_request = scapy.ARP(pdst=ip) # creating a arp packet with dest ip
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff") # adding a dest MAC addr to arp packet
     arp_request_broadcast = broadcast/arp_request # combining both dest ip and dest Mac addr
-    answered_list, unanswered_list = scapy.srp(arp_request_broadcast, timeout=1)[0] # broadcasting arp packet and capturing a results
+    answered_list, unanswered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0] # broadcasting arp packet and capturing a results
     
+    print("IP\t\t\tMAC Address\n-------------------")
     for element in answered_list:
-        print(element[1].psrc) # printing responded vm ip addr
-        print(element[1].hwsrc) # printing responded vm mac addr
-        print("--------------------")
+        # printing responded vm ip addr and printing responded vm mac addr
+        print(element[1].psrc + "\t\t" + element[1].hwsrc) 
     
     # arp_request_broadcast.show() # to show to details
     # print(arp_request.summary()) # printing a summary of message
