@@ -7,8 +7,11 @@ def get_arguments():
     # initizing object for taking input through argument
     parser = argparse.ArgumentParser()
     # options for user input through arguments
-    parser.add_argument("-t", "--target", dest="target", help="Target IP / IP range.")
+    parser.add_argument("-t", "--target", dest="target", help="Target IP / IP Range.")
     options = parser.parse_args()
+    if not options.target: # validating user input contains target IP or not
+        parser.error("[-] Please specify an Target IP / IP Range, use --help for more info.")
+
     return options
 
 
