@@ -15,7 +15,7 @@ def get_arguments() -> optparse.Values:
     (options, arguments) = parser.parse_args()
     if not options.interface: # validating user input contains interface or not
         parser.error("[-] Please specify an interface, use --help for more info.")
-    elif not options.new_mac: # validating user input contains new_mac or not
+    if not options.new_mac: # validating user input contains new_mac or not
         parser.error("[-] Please specify a new mac, use --help for more info.")
     return options
 
