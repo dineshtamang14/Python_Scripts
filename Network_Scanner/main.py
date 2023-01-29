@@ -2,7 +2,7 @@ import scapy.all as scapy
 import argparse
 
 
-def get_arguments():
+def get_arguments() -> argparse.Namespace:
     '''captures and returns the arguments passed by the user'''
     # initizing object for taking input through argument
     parser = argparse.ArgumentParser()
@@ -20,7 +20,7 @@ def scan(ip: str) -> list:
     arp_request = scapy.ARP(pdst=ip) # creating a arp packet with dest ip
     broadcast = scapy.Ether(dst="ff:ff:ff:ff:ff:ff") # adding a dest MAC addr to arp packet
     arp_request_broadcast = broadcast/arp_request # combining both dest ip and dest Mac addr
-    answered_list, unanswered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0] # broadcasting arp packet and capturing a results
+    answered_list = scapy.srp(arp_request_broadcast, timeout=1, verbose=False)[0] # broadcasting arp packet and capturing a results
     
     clients_list = []
     for element in answered_list:
