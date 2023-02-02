@@ -4,7 +4,7 @@ import argparse
 
 
 
-def get_arguments():
+def get_arguments() -> argparse.Namespace:
     '''captures and returns the arguments passed by the user'''
     # initizing object for taking input through argument
     parser = argparse.ArgumentParser()
