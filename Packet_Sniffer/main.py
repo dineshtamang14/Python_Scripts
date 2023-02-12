@@ -12,13 +12,13 @@ def get_url(packet) -> str:
     return packet[http.HTTPRequest].Host + packet[http.HTTPRequest].Path
     
     
-def get_login_info(packet):
+def get_login_info(packet) -> str:
     '''Takes packet and returns user credentials'''
     if packet.haslayer(scapy.Raw):
         # printing a data from all layers.
         # print(packet.show()) 
         # printing a specific field from packet
-        load = packet[scapy.Raw].load
+        load = str(packet[scapy.Raw].load)
         keywords = ["username", "user", "login", "password", "pass"]
             
         for keyword in keywords:
